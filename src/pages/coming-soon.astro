@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Coming Soon - Knowly" description="Knowly for iOS is coming soon to the App Store">
+  <section class="py-24 md:py-32">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+        <span class="text-white font-bold text-4xl">K</span>
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-bold text-text mb-6 text-display">
+        Coming Soon
+      </h1>
+
+      <p class="text-xl text-text-secondary mb-8">
+        Knowly for iOS is currently in review and will be available on the App Store soon.
+      </p>
+
+      <div class="card p-8 mb-8">
+        <h2 class="text-xl font-semibold text-text mb-4">What you'll get:</h2>
+        <ul class="text-left text-text-secondary space-y-3">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            A new fascinating lesson every day
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            365 lessons across 19 categories
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Create and save your own lessons
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Daily notification reminders
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-secondary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Home screen widget
+          </li>
+        </ul>
+      </div>
+
+      <p class="text-text-muted mb-8">
+        In the meantime, explore all lessons on the web:
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/today" class="btn-primary">
+          Today's Lesson
+        </a>
+        <a href="/lessons" class="btn-secondary">
+          Browse All Lessons
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,22 +1,25 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import lessonsData from '../../public/lessons.json';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import lessonsData from '../../../public/lessons.json';
 
-// Get today's day of year (1-365)
-const now = new Date();
-const start = new Date(now.getFullYear(), 0, 0);
-const diff = now - start;
-const oneDay = 1000 * 60 * 60 * 24;
-const dayOfYear = Math.floor(diff / oneDay);
+export function getStaticPaths() {
+  return lessonsData.lessons.map(lesson => ({
+    params: { day: lesson.dayOfYear.toString() },
+    props: { lesson }
+  }));
+}
 
-// Get today's lesson
-const todayLesson = lessonsData.lessons.find(l => l.dayOfYear === dayOfYear) || lessonsData.lessons[0];
+const { lesson } = Astro.props;
+const dayOfYear = lesson.dayOfYear;
 
-// Format date
+// Calculate the date for this day of year
+const year = new Date().getFullYear();
+const date = new Date(year, 0);
+date.setDate(dayOfYear);
 const options = { month: 'long', day: 'numeric' };
-const formattedDate = now.toLocaleDateString('en-US', options);
+const formattedDate = date.toLocaleDateString('en-US', options);
 
-// Get category icon based on category
+// Get category icon
 const categoryIcons = {
   'Mathematics': 'f(x)',
   'Biology': '🧬',
@@ -39,26 +42,41 @@ const categoryIcons = {
   'Animals': '🦋'
 };
 
-const categoryIcon = categoryIcons[todayLesson.category] || '📚';
+const categoryIcon = categoryIcons[lesson.category] || '📚';
+
+// Check if prev/next lessons exist
+const prevDay = dayOfYear > 1 ? dayOfYear - 1 : null;
+const nextDay = dayOfYear < 365 ? dayOfYear + 1 : null;
+
+// Get today's day of year
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 0);
+const diff = now - start;
+const oneDay = 1000 * 60 * 60 * 24;
+const todayDayOfYear = Math.floor(diff / oneDay);
+const isToday = dayOfYear === todayDayOfYear;
 ---
 
-<BaseLayout title={`${todayLesson.title} - Today's Lesson - Knowly`} description={todayLesson.content.substring(0, 160)}>
+<BaseLayout title={`${lesson.title} - Day ${dayOfYear} - Knowly`} description={lesson.content.substring(0, 160)}>
   <section class="py-12 md:py-24">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-12">
-        <div class="inline-flex items-center gap-2 bg-highlight text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-          </svg>
-          Today's Lesson
-        </div>
+        {isToday ? (
+          <div class="inline-flex items-center gap-2 bg-highlight text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            Today's Lesson
+          </div>
+        ) : (
+          <div class="inline-flex items-center gap-2 bg-card text-text-secondary px-4 py-2 rounded-full text-sm font-medium mb-6">
+            Day {dayOfYear} of 365
+          </div>
+        )}
         <h1 class="text-4xl md:text-5xl font-bold text-text mb-4 text-display">
           {formattedDate}
         </h1>
-        <p class="text-xl text-text-secondary">
-          Day {dayOfYear} of 365
-        </p>
       </div>
 
       <!-- Lesson Card -->
@@ -68,17 +86,17 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
             <div class="w-12 h-12 bg-secondary-light rounded-full flex items-center justify-center">
               <span class="text-secondary font-semibold text-lg">{categoryIcon}</span>
             </div>
-            <span class="text-secondary text-sm font-semibold tracking-wider uppercase">{todayLesson.category}</span>
+            <span class="text-secondary text-sm font-semibold tracking-wider uppercase">{lesson.category}</span>
           </div>
         </div>
 
         <h2 class="text-3xl md:text-4xl font-bold text-text mb-4 text-display">
-          {todayLesson.title}
+          {lesson.title}
         </h2>
         <div class="w-16 h-1 bg-secondary rounded-full mb-8"></div>
 
         <p class="text-text-secondary text-lg md:text-xl leading-relaxed mb-10">
-          {todayLesson.content}
+          {lesson.content}
         </p>
 
         <!-- Did you know box -->
@@ -88,7 +106,7 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
             <span class="font-semibold text-text">Did you know?</span>
           </div>
           <p class="text-text-secondary text-lg">
-            {todayLesson.funFact}
+            {lesson.funFact}
           </p>
         </div>
 
@@ -108,15 +126,15 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
 
       <!-- Navigation -->
       <div class="mt-8 flex justify-between items-center">
-        {dayOfYear > 1 ? (
+        {prevDay ? (
           <a
-            href={`/lesson/${dayOfYear - 1}`}
+            href={`/lesson/${prevDay}`}
             class="text-text-secondary hover:text-text flex items-center gap-2 transition-colors"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
-            Yesterday
+            Previous
           </a>
         ) : (
           <span></span>
@@ -127,12 +145,12 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
         >
           Browse All Lessons
         </a>
-        {dayOfYear < 365 ? (
+        {nextDay ? (
           <a
-            href={`/lesson/${dayOfYear + 1}`}
+            href={`/lesson/${nextDay}`}
             class="text-text-secondary hover:text-text flex items-center gap-2 transition-colors"
           >
-            Tomorrow
+            Next
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
@@ -164,15 +182,14 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
   </section>
 </BaseLayout>
 
-<script define:vars={{ todayLesson }}>
+<script define:vars={{ lesson }}>
   document.addEventListener('DOMContentLoaded', () => {
     const shareButton = document.getElementById('share-lesson');
 
-    // Share lesson
     shareButton.addEventListener('click', async () => {
       const shareData = {
-        title: todayLesson.title,
-        text: `${todayLesson.content.substring(0, 100)}...`,
+        title: lesson.title,
+        text: `${lesson.content.substring(0, 100)}...`,
         url: window.location.href
       };
 
@@ -183,8 +200,7 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
           console.log('Share cancelled');
         }
       } else {
-        // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(`${todayLesson.title}\n\n${todayLesson.content}\n\nLearn more: ${window.location.href}`);
+        await navigator.clipboard.writeText(`${lesson.title}\n\n${lesson.content}\n\nLearn more: ${window.location.href}`);
         const originalText = shareButton.innerHTML;
         shareButton.innerHTML = `
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
