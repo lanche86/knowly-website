@@ -2,7 +2,107 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-primary: #6366f1;
-  --color-primary-dark: #4f46e5;
-  --font-family-display: "Inter", system-ui, sans-serif;
+  /* App-matching color palette */
+  --color-background: #F5F3EE;
+  --color-background-secondary: #EBE8E2;
+  --color-card: #FFFFFF;
+  --color-primary: #D4A853;
+  --color-primary-dark: #C49A48;
+  --color-secondary: #5B8DC9;
+  --color-secondary-light: #E8F0F8;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-highlight: #FDF6E3;
+  --color-border: #E8E5E0;
+
+  /* Typography - matching iOS system font feel */
+  --font-family-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  --font-family-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+}
+
+/* Base styles to match app */
+html {
+  background-color: var(--color-background);
+}
+
+body {
+  font-family: var(--font-family-body);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Card styling matching the app */
+.card {
+  background-color: var(--color-card);
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Highlight box (like "Did you know?") */
+.highlight-box {
+  background-color: var(--color-highlight);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+/* Button styles matching app */
+.btn-primary {
+  background-color: var(--color-text);
+  color: white;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #333333;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: white;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #4A7CB8;
+}
+
+/* Category badge styling */
+.category-badge {
+  background-color: var(--color-secondary-light);
+  color: var(--color-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+}
+
+/* Progress indicator styling */
+.progress-bar {
+  background-color: var(--color-border);
+  border-radius: 4px;
+  height: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background-color: var(--color-secondary);
+  height: 100%;
+  border-radius: 4px;
+}
+
+/* Typography utilities */
+.text-display {
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }

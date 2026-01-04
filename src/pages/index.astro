@@ -7,18 +7,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <section class="relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
       <div class="text-center">
-        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-          Learn something new
-          <span class="text-primary">every day</span>
+        <div class="inline-flex items-center gap-2 bg-highlight text-primary px-4 py-2 rounded-full text-sm font-medium mb-8">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          New lessons every day
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold text-text mb-6 text-display">
+          Today's Lesson
         </h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-          Knowly helps you capture and remember the lessons life teaches you.
-          Turn daily experiences into lasting wisdom.
+        <p class="text-xl text-text-secondary max-w-2xl mx-auto mb-4">
+          Expand your knowledge
         </p>
+
+        <!-- App Preview Card -->
+        <div class="max-w-md mx-auto mt-12 mb-12">
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center">
+                  <span class="text-secondary font-semibold text-sm">f(x)</span>
+                </div>
+                <span class="text-secondary text-sm font-semibold tracking-wider uppercase">Mathematics</span>
+              </div>
+              <span class="text-text-muted text-sm">January 4</span>
+            </div>
+            <h3 class="text-2xl font-bold text-text mb-3 text-left">The Golden Ratio</h3>
+            <div class="w-12 h-1 bg-secondary rounded-full mb-4"></div>
+            <p class="text-text-secondary text-left leading-relaxed">
+              The golden ratio, approximately 1.618, appears throughout nature and art. From the spiral of a nautilus shell to the proportions of the Parthenon...
+            </p>
+
+            <!-- Did you know box -->
+            <div class="highlight-box mt-6">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-lg">💡</span>
+                <span class="font-semibold text-text text-sm">Did you know?</span>
+              </div>
+              <p class="text-text-secondary text-sm">
+                Sunflower seeds grow in a pattern based on the golden ratio, maximizing the number of seeds.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <a
             href="https://apps.apple.com/app/knowly"
-            class="inline-flex items-center justify-center bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-xl text-lg font-medium transition-colors"
+            class="btn-primary inline-flex items-center justify-center text-lg"
           >
             <svg class="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
@@ -31,44 +67,75 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 
   <!-- Features Section -->
-  <section class="bg-gray-50 py-24">
+  <section class="py-24">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-center text-gray-900 mb-16">
-        Why Knowly?
-      </h2>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white p-8 rounded-2xl shadow-sm">
-          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-text mb-4 text-display">
+          Why Knowly?
+        </h2>
+        <p class="text-text-secondary">Build your personal library of wisdom</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card p-8">
+          <div class="w-14 h-14 bg-secondary-light rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-3">Capture Lessons</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-text mb-3">Capture Lessons</h3>
+          <p class="text-text-secondary">
             Quickly jot down insights and lessons as they happen. Never forget what life teaches you.
           </p>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm">
-          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card p-8">
+          <div class="w-14 h-14 bg-highlight rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-3">Build Wisdom</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-text mb-3">Build Wisdom</h3>
+          <p class="text-text-secondary">
             Watch your personal knowledge base grow over time into a library of hard-earned wisdom.
           </p>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-sm">
-          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="card p-8">
+          <div class="w-14 h-14 bg-secondary-light rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
             </svg>
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-3">Remember & Reflect</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-text mb-3">Remember & Reflect</h3>
+          <p class="text-text-secondary">
             Revisit your lessons regularly. Spaced repetition helps cement learnings into long-term memory.
           </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section matching app counter -->
+  <section class="py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="card p-8 md:p-12">
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+          <div>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-highlight rounded-2xl mb-4">
+              <span class="text-3xl font-bold text-primary">5</span>
+            </div>
+            <p class="text-text-secondary">lessons learned</p>
+          </div>
+          <div>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-secondary-light rounded-2xl mb-4">
+              <span class="text-3xl font-bold text-secondary">12</span>
+            </div>
+            <p class="text-text-secondary">categories explored</p>
+          </div>
+          <div>
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-highlight rounded-2xl mb-4">
+              <span class="text-3xl font-bold text-primary">∞</span>
+            </div>
+            <p class="text-text-secondary">wisdom to gain</p>
+          </div>
         </div>
       </div>
     </div>
@@ -77,18 +144,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <!-- CTA Section -->
   <section class="py-24">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl font-bold text-gray-900 mb-6">
-        Start building your personal wisdom library
-      </h2>
-      <p class="text-xl text-gray-600 mb-10">
-        Download Knowly today and never let a valuable lesson slip away again.
-      </p>
-      <a
-        href="https://apps.apple.com/app/knowly"
-        class="inline-flex items-center justify-center bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl text-lg font-medium transition-colors"
-      >
-        Get Knowly Free
-      </a>
+      <div class="card p-12">
+        <h2 class="text-3xl font-bold text-text mb-4 text-display">
+          Start building your personal wisdom library
+        </h2>
+        <p class="text-xl text-text-secondary mb-10">
+          Download Knowly today and never let a valuable lesson slip away again.
+        </p>
+        <a
+          href="https://apps.apple.com/app/knowly"
+          class="btn-secondary inline-flex items-center justify-center text-lg"
+        >
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/>
+          </svg>
+          Get Knowly Free
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>

@@ -12,17 +12,25 @@ const { title, description, pubDate } = Astro.props;
 
 <BaseLayout title={`${title} | Knowly Blog`} description={description}>
   <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <header class="mb-8">
-      <a href="/blog" class="text-primary hover:text-primary-dark text-sm mb-4 inline-block">&larr; Back to Blog</a>
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">{title}</h1>
-      {pubDate && (
-        <time class="text-gray-500 text-sm">
-          {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </time>
-      )}
-    </header>
-    <div class="prose prose-lg prose-gray max-w-none">
-      <slot />
+    <div class="card p-8 md:p-12">
+      <header class="mb-8">
+        <a href="/blog" class="text-secondary hover:text-secondary/80 text-sm mb-4 inline-flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          Back to Blog
+        </a>
+        <h1 class="text-4xl font-bold text-text mb-4 text-display">{title}</h1>
+        {pubDate && (
+          <time class="text-text-muted text-sm">
+            {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </time>
+        )}
+      </header>
+      <div class="w-16 h-1 bg-secondary rounded-full mb-8"></div>
+      <div class="prose prose-lg max-w-none prose-headings:text-text prose-p:text-text-secondary prose-a:text-secondary prose-strong:text-text">
+        <slot />
+      </div>
     </div>
   </article>
 </BaseLayout>

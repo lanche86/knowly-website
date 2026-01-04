@@ -9,35 +9,53 @@ const posts = (await getCollection('blog')).sort(
 
 <BaseLayout title="Blog | Knowly">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-    <p class="text-xl text-gray-600 mb-12">
-      Thoughts on learning, personal growth, and building Knowly.
-    </p>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-text mb-4 text-display">Blog</h1>
+      <p class="text-xl text-text-secondary">
+        Thoughts on learning, personal growth, and building Knowly.
+      </p>
+    </div>
 
-    <div class="space-y-8">
+    <div class="space-y-6">
       {posts.map((post) => (
-        <article class="border-b border-gray-100 pb-8">
-          <a href={`/blog/${post.slug}`} class="group">
-            <time class="text-sm text-gray-500">
+        <a href={`/blog/${post.slug}`} class="card p-6 block group hover:shadow-md transition-shadow">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 bg-secondary-light rounded-full flex items-center justify-center">
+              <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <time class="text-sm text-text-muted">
               {post.data.pubDate.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
               })}
             </time>
-            <h2 class="text-2xl font-semibold text-gray-900 group-hover:text-primary transition-colors mt-2 mb-3">
-              {post.data.title}
-            </h2>
-            <p class="text-gray-600">{post.data.description}</p>
-          </a>
-        </article>
+          </div>
+          <h2 class="text-xl font-semibold text-text group-hover:text-secondary transition-colors mb-2">
+            {post.data.title}
+          </h2>
+          <p class="text-text-secondary">{post.data.description}</p>
+          <div class="mt-4 flex items-center gap-2 text-secondary text-sm font-medium">
+            Read more
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        </a>
       ))}
     </div>
 
     {posts.length === 0 && (
-      <p class="text-gray-500 text-center py-12">
-        No posts yet. Check back soon!
-      </p>
+      <div class="card p-12 text-center">
+        <div class="w-16 h-16 bg-highlight rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <p class="text-text-secondary">No posts yet. Check back soon!</p>
+      </div>
     )}
   </div>
 </BaseLayout>
