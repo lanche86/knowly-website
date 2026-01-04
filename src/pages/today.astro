@@ -93,24 +93,15 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
         </div>
 
         <!-- Actions -->
-        <div class="mt-10 flex flex-col sm:flex-row gap-4">
-          <button
-            id="save-lesson"
-            class="btn-primary flex-1 flex items-center justify-center gap-2"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-            </svg>
-            <span id="save-text">Save to My Lessons</span>
-          </button>
+        <div class="mt-10">
           <button
             id="share-lesson"
-            class="btn-secondary flex-1 flex items-center justify-center gap-2"
+            class="btn-primary w-full flex items-center justify-center gap-2"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
             </svg>
-            Share
+            Share this lesson
           </button>
         </div>
       </div>
@@ -176,35 +167,9 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
 
 <script define:vars={{ todayLesson }}>
   document.addEventListener('DOMContentLoaded', () => {
-    const saveButton = document.getElementById('save-lesson');
-    const saveText = document.getElementById('save-text');
     const shareButton = document.getElementById('share-lesson');
     const newsletterForm = document.getElementById('newsletter-form');
     const newsletterSuccess = document.getElementById('newsletter-success');
-
-    // Check if already saved
-    const savedLessons = JSON.parse(localStorage.getItem('knowly-saved-lessons') || '[]');
-    const isSaved = savedLessons.some(l => l.id === todayLesson.id);
-    if (isSaved) {
-      saveText.textContent = 'Saved ✓';
-      saveButton.classList.add('opacity-60');
-    }
-
-    // Save lesson
-    saveButton.addEventListener('click', () => {
-      const savedLessons = JSON.parse(localStorage.getItem('knowly-saved-lessons') || '[]');
-      const exists = savedLessons.some(l => l.id === todayLesson.id);
-
-      if (!exists) {
-        savedLessons.push({
-          ...todayLesson,
-          savedAt: new Date().toISOString()
-        });
-        localStorage.setItem('knowly-saved-lessons', JSON.stringify(savedLessons));
-        saveText.textContent = 'Saved ✓';
-        saveButton.classList.add('opacity-60');
-      }
-    });
 
     // Share lesson
     shareButton.addEventListener('click', async () => {
@@ -222,21 +187,22 @@ const categoryIcon = categoryIcons[todayLesson.category] || '📚';
         }
       } else {
         // Fallback: copy to clipboard
-        navigator.clipboard.writeText(`${todayLesson.title}\n\n${todayLesson.content}\n\nLearn more: ${window.location.href}`);
-        shareButton.querySelector('span') || shareButton.insertAdjacentText('beforeend', ' Copied!');
+        await navigator.clipboard.writeText(`${todayLesson.title}\n\n${todayLesson.content}\n\nLearn more: ${window.location.href}`);
+        const originalText = shareButton.innerHTML;
+        shareButton.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Copied to clipboard!
+        `;
         setTimeout(() => {
-          shareButton.innerHTML = `
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-            </svg>
-            Share
-          `;
+          shareButton.innerHTML = originalText;
         }, 2000);
       }
     });
 
     // Newsletter form
-    newsletterForm.addEventListener('submit', (e) => {
+    newsletterForm?.addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('newsletter-email').value;
       // Store locally (in real app, send to server)
