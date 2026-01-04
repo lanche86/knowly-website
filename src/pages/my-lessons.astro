@@ -1,0 +1,430 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="My Lessons - Knowly" description="Your personal collection of saved lessons and custom insights.">
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-text mb-4 text-display">
+          My Lessons
+        </h1>
+        <p class="text-xl text-text-secondary">
+          Your personal knowledge library
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-8 bg-card rounded-full p-1 inline-flex mx-auto w-full justify-center">
+        <button
+          id="tab-saved"
+          class="tab-btn px-6 py-2 rounded-full text-sm font-medium transition-all bg-primary text-white"
+          data-tab="saved"
+        >
+          Saved Lessons
+        </button>
+        <button
+          id="tab-created"
+          class="tab-btn px-6 py-2 rounded-full text-sm font-medium transition-all text-text-secondary hover:text-text"
+          data-tab="created"
+        >
+          My Creations
+        </button>
+      </div>
+
+      <!-- Saved Lessons Section -->
+      <div id="saved-section">
+        <div id="saved-lessons-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <div id="saved-empty" class="hidden text-center py-16">
+          <div class="w-20 h-20 bg-secondary-light rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-text mb-2">No saved lessons yet</h3>
+          <p class="text-text-secondary mb-6">Save lessons from Today's Lesson or Browse to build your collection</p>
+          <a href="/today" class="btn-secondary inline-block">
+            See Today's Lesson
+          </a>
+        </div>
+      </div>
+
+      <!-- Created Lessons Section -->
+      <div id="created-section" class="hidden">
+        <!-- Create New Lesson Button -->
+        <button
+          id="create-lesson-btn"
+          class="w-full card p-6 border-2 border-dashed border-border hover:border-primary hover:bg-highlight/50 transition-all mb-6 group"
+        >
+          <div class="flex items-center justify-center gap-3 text-text-secondary group-hover:text-primary">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span class="font-medium">Create New Lesson</span>
+          </div>
+        </button>
+
+        <div id="created-lessons-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+
+        <div id="created-empty" class="hidden text-center py-16">
+          <div class="w-20 h-20 bg-highlight rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-text mb-2">No lessons created yet</h3>
+          <p class="text-text-secondary mb-6">Create your own lessons to capture personal insights</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Create Lesson Modal -->
+  <div id="create-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative">
+      <button id="close-create-modal" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-background hover:bg-border flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <h2 class="text-2xl font-bold text-text mb-6 text-display">Create New Lesson</h2>
+
+      <form id="create-lesson-form" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-text mb-2">Title *</label>
+          <input
+            type="text"
+            id="lesson-title"
+            required
+            placeholder="What did you learn?"
+            class="w-full px-4 py-3 bg-background rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-text mb-2">Category</label>
+          <select
+            id="lesson-category"
+            class="w-full px-4 py-3 bg-background rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text"
+          >
+            <option value="General">General</option>
+            <option value="Life Lessons">Life Lessons</option>
+            <option value="Work">Work</option>
+            <option value="Relationships">Relationships</option>
+            <option value="Health">Health</option>
+            <option value="Finance">Finance</option>
+            <option value="Creativity">Creativity</option>
+            <option value="Personal Growth">Personal Growth</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-text mb-2">Content *</label>
+          <textarea
+            id="lesson-content"
+            required
+            rows="4"
+            placeholder="Describe what you learned in detail..."
+            class="w-full px-4 py-3 bg-background rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text resize-none"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-text mb-2">Fun Fact / Key Takeaway</label>
+          <input
+            type="text"
+            id="lesson-funfact"
+            placeholder="One memorable insight..."
+            class="w-full px-4 py-3 bg-background rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text"
+          />
+        </div>
+
+        <div class="flex gap-4 pt-4">
+          <button
+            type="button"
+            id="cancel-create"
+            class="flex-1 px-6 py-3 rounded-xl font-medium text-text-secondary hover:bg-background transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="flex-1 btn-primary"
+          >
+            Create Lesson
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Lesson Modal -->
+  <div id="view-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative">
+      <button id="close-view-modal" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-background hover:bg-border flex items-center justify-center transition-colors">
+        <svg class="w-5 h-5 text-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div id="view-modal-content">
+        <!-- Content injected via JS -->
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Tab switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const savedSection = document.getElementById('saved-section');
+    const createdSection = document.getElementById('created-section');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('bg-primary', 'text-white');
+          b.classList.add('text-text-secondary');
+        });
+        btn.classList.add('bg-primary', 'text-white');
+        btn.classList.remove('text-text-secondary');
+
+        if (btn.dataset.tab === 'saved') {
+          savedSection.classList.remove('hidden');
+          createdSection.classList.add('hidden');
+        } else {
+          savedSection.classList.add('hidden');
+          createdSection.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Render saved lessons
+    function renderSavedLessons() {
+      const savedLessons = JSON.parse(localStorage.getItem('knowly-saved-lessons') || '[]');
+      const list = document.getElementById('saved-lessons-list');
+      const empty = document.getElementById('saved-empty');
+
+      if (savedLessons.length === 0) {
+        list.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      list.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      list.innerHTML = savedLessons.map(lesson => `
+        <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow lesson-item" data-id="${lesson.id}" data-type="saved">
+          <div class="flex items-center justify-between mb-3">
+            <span class="category-badge">${lesson.category}</span>
+            <button class="delete-btn text-text-muted hover:text-red-500 transition-colors" data-id="${lesson.id}" data-type="saved">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+          <h3 class="text-lg font-semibold text-text mb-2">${lesson.title}</h3>
+          <p class="text-text-secondary text-sm line-clamp-2">${lesson.content}</p>
+        </div>
+      `).join('');
+
+      // Add click handlers
+      list.querySelectorAll('.lesson-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.delete-btn')) return;
+          const lesson = savedLessons.find(l => l.id === item.dataset.id);
+          openViewModal(lesson);
+        });
+      });
+
+      list.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          const filtered = savedLessons.filter(l => l.id !== id);
+          localStorage.setItem('knowly-saved-lessons', JSON.stringify(filtered));
+          renderSavedLessons();
+        });
+      });
+    }
+
+    // Render created lessons
+    function renderCreatedLessons() {
+      const createdLessons = JSON.parse(localStorage.getItem('knowly-created-lessons') || '[]');
+      const list = document.getElementById('created-lessons-list');
+      const empty = document.getElementById('created-empty');
+
+      if (createdLessons.length === 0) {
+        list.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      list.classList.remove('hidden');
+      empty.classList.add('hidden');
+
+      list.innerHTML = createdLessons.map(lesson => `
+        <div class="card p-6 cursor-pointer hover:shadow-lg transition-shadow lesson-item" data-id="${lesson.id}" data-type="created">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="category-badge">${lesson.category}</span>
+              <span class="text-xs text-text-muted bg-highlight px-2 py-1 rounded-full">Created by you</span>
+            </div>
+            <button class="delete-btn text-text-muted hover:text-red-500 transition-colors" data-id="${lesson.id}" data-type="created">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+              </svg>
+            </button>
+          </div>
+          <h3 class="text-lg font-semibold text-text mb-2">${lesson.title}</h3>
+          <p class="text-text-secondary text-sm line-clamp-2">${lesson.content}</p>
+        </div>
+      `).join('');
+
+      // Add click handlers
+      list.querySelectorAll('.lesson-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('.delete-btn')) return;
+          const lesson = createdLessons.find(l => l.id === item.dataset.id);
+          openViewModal(lesson);
+        });
+      });
+
+      list.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          const filtered = createdLessons.filter(l => l.id !== id);
+          localStorage.setItem('knowly-created-lessons', JSON.stringify(filtered));
+          renderCreatedLessons();
+        });
+      });
+    }
+
+    // View modal
+    const viewModal = document.getElementById('view-modal');
+    const viewModalContent = document.getElementById('view-modal-content');
+    const closeViewModal = document.getElementById('close-view-modal');
+
+    function openViewModal(lesson) {
+      viewModalContent.innerHTML = `
+        <div class="flex items-center justify-between mb-6">
+          <span class="category-badge">${lesson.category}</span>
+          ${lesson.dayOfYear ? `<span class="text-text-muted text-sm">Day ${lesson.dayOfYear}</span>` : ''}
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-text mb-4 text-display">${lesson.title}</h2>
+        <div class="w-16 h-1 bg-secondary rounded-full mb-6"></div>
+        <p class="text-text-secondary text-lg leading-relaxed mb-8">${lesson.content}</p>
+        ${lesson.funFact ? `
+          <div class="highlight-box">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-lg">💡</span>
+              <span class="font-semibold text-text text-sm">Key Takeaway</span>
+            </div>
+            <p class="text-text-secondary">${lesson.funFact}</p>
+          </div>
+        ` : ''}
+      `;
+
+      viewModal.classList.remove('hidden');
+      viewModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewModalHandler() {
+      viewModal.classList.add('hidden');
+      viewModal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    closeViewModal.addEventListener('click', closeViewModalHandler);
+    viewModal.addEventListener('click', (e) => {
+      if (e.target === viewModal) closeViewModalHandler();
+    });
+
+    // Create modal
+    const createModal = document.getElementById('create-modal');
+    const createBtn = document.getElementById('create-lesson-btn');
+    const closeCreateModal = document.getElementById('close-create-modal');
+    const cancelCreate = document.getElementById('cancel-create');
+    const createForm = document.getElementById('create-lesson-form');
+
+    function openCreateModal() {
+      createModal.classList.remove('hidden');
+      createModal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCreateModalHandler() {
+      createModal.classList.add('hidden');
+      createModal.classList.remove('flex');
+      document.body.style.overflow = '';
+      createForm.reset();
+    }
+
+    createBtn.addEventListener('click', openCreateModal);
+    closeCreateModal.addEventListener('click', closeCreateModalHandler);
+    cancelCreate.addEventListener('click', closeCreateModalHandler);
+    createModal.addEventListener('click', (e) => {
+      if (e.target === createModal) closeCreateModalHandler();
+    });
+
+    createForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById('lesson-title').value;
+      const category = document.getElementById('lesson-category').value;
+      const content = document.getElementById('lesson-content').value;
+      const funFact = document.getElementById('lesson-funfact').value;
+
+      const newLesson = {
+        id: crypto.randomUUID(),
+        title,
+        category,
+        content,
+        funFact,
+        isUserCreated: true,
+        createdAt: new Date().toISOString()
+      };
+
+      const createdLessons = JSON.parse(localStorage.getItem('knowly-created-lessons') || '[]');
+      createdLessons.unshift(newLesson);
+      localStorage.setItem('knowly-created-lessons', JSON.stringify(createdLessons));
+
+      closeCreateModalHandler();
+      renderCreatedLessons();
+
+      // Switch to created tab
+      document.getElementById('tab-created').click();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeViewModalHandler();
+        closeCreateModalHandler();
+      }
+    });
+
+    // Initial render
+    renderSavedLessons();
+    renderCreatedLessons();
+  });
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

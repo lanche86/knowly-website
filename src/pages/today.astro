@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import lessonsData from '../../public/lessons.json';
+
+// Get today's day of year (1-365)
+const now = new Date();
+const start = new Date(now.getFullYear(), 0, 0);
+const diff = now - start;
+const oneDay = 1000 * 60 * 60 * 24;
+const dayOfYear = Math.floor(diff / oneDay);
+
+// Get today's lesson
+const todayLesson = lessonsData.lessons.find(l => l.dayOfYear === dayOfYear) || lessonsData.lessons[0];
+
+// Format date
+const options = { month: 'long', day: 'numeric' };
+const formattedDate = now.toLocaleDateString('en-US', options);
+
+// Get category icon based on category
+const categoryIcons = {
+  'Mathematics': 'f(x)',
+  'Biology': '🧬',
+  'Space': '🌌',
+  'Psychology': '🧠',
+  'History': '📜',
+  'Physics': '⚛️',
+  'Food Science': '🍳',
+  'Neuroscience': '🧠',
+  'Technology': '💻',
+  'Art & Culture': '🎨',
+  'Philosophy': '💭',
+  'Geography': '🌍',
+  'Music': '🎵',
+  'Economics': '📈',
+  'Health': '❤️',
+  'Language': '📝',
+  'Chemistry': '⚗️',
+  'Environment': '🌱',
+  'Animals': '🦋'
+};
+
+const categoryIcon = categoryIcons[todayLesson.category] || '📚';
+---
+
+<BaseLayout title={`${todayLesson.title} - Today's Lesson - Knowly`} description={todayLesson.content.substring(0, 160)}>
+  <section class="py-12 md:py-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 bg-highlight text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          Today's Lesson
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-text mb-4 text-display">
+          {formattedDate}
+        </h1>
+        <p class="text-xl text-text-secondary">
+          Day {dayOfYear} of 365
+        </p>
+      </div>
+
+      <!-- Lesson Card -->
+      <div class="card p-8 md:p-12">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-secondary-light rounded-full flex items-center justify-center">
+              <span class="text-secondary font-semibold text-lg">{categoryIcon}</span>
+            </div>
+            <span class="text-secondary text-sm font-semibold tracking-wider uppercase">{todayLesson.category}</span>
+          </div>
+        </div>
+
+        <h2 class="text-3xl md:text-4xl font-bold text-text mb-4 text-display">
+          {todayLesson.title}
+        </h2>
+        <div class="w-16 h-1 bg-secondary rounded-full mb-8"></div>
+
+        <p class="text-text-secondary text-lg md:text-xl leading-relaxed mb-10">
+          {todayLesson.content}
+        </p>
+
+        <!-- Did you know box -->
+        <div class="highlight-box">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-xl">💡</span>
+            <span class="font-semibold text-text">Did you know?</span>
+          </div>
+          <p class="text-text-secondary text-lg">
+            {todayLesson.funFact}
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-10 flex flex-col sm:flex-row gap-4">
+          <button
+            id="save-lesson"
+            class="btn-primary flex-1 flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+            </svg>
+            <span id="save-text">Save to My Lessons</span>
+          </button>
+          <button
+            id="share-lesson"
+            class="btn-secondary flex-1 flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="mt-8 flex justify-between items-center">
+        <a
+          href={`/lessons?day=${dayOfYear - 1}`}
+          class="text-text-secondary hover:text-text flex items-center gap-2 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+          Yesterday
+        </a>
+        <a
+          href="/lessons"
+          class="text-secondary hover:text-secondary/80 font-medium transition-colors"
+        >
+          Browse All Lessons
+        </a>
+        <a
+          href={`/lessons?day=${dayOfYear + 1}`}
+          class="text-text-secondary hover:text-text flex items-center gap-2 transition-colors"
+        >
+          Tomorrow
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Newsletter Signup -->
+      <div class="mt-16 card p-8 text-center">
+        <h3 class="text-2xl font-bold text-text mb-4 text-display">
+          Never miss a lesson
+        </h3>
+        <p class="text-text-secondary mb-6">
+          Get today's lesson delivered to your inbox every morning
+        </p>
+        <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <input
+            type="email"
+            id="newsletter-email"
+            placeholder="Enter your email"
+            required
+            class="flex-1 px-4 py-3 bg-background rounded-xl border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-text"
+          />
+          <button
+            type="submit"
+            class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-medium transition-colors whitespace-nowrap"
+          >
+            Subscribe
+          </button>
+        </form>
+        <p id="newsletter-success" class="hidden text-secondary mt-4 font-medium">
+          Thanks for subscribing!
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ todayLesson }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const saveButton = document.getElementById('save-lesson');
+    const saveText = document.getElementById('save-text');
+    const shareButton = document.getElementById('share-lesson');
+    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterSuccess = document.getElementById('newsletter-success');
+
+    // Check if already saved
+    const savedLessons = JSON.parse(localStorage.getItem('knowly-saved-lessons') || '[]');
+    const isSaved = savedLessons.some(l => l.id === todayLesson.id);
+    if (isSaved) {
+      saveText.textContent = 'Saved ✓';
+      saveButton.classList.add('opacity-60');
+    }
+
+    // Save lesson
+    saveButton.addEventListener('click', () => {
+      const savedLessons = JSON.parse(localStorage.getItem('knowly-saved-lessons') || '[]');
+      const exists = savedLessons.some(l => l.id === todayLesson.id);
+
+      if (!exists) {
+        savedLessons.push({
+          ...todayLesson,
+          savedAt: new Date().toISOString()
+        });
+        localStorage.setItem('knowly-saved-lessons', JSON.stringify(savedLessons));
+        saveText.textContent = 'Saved ✓';
+        saveButton.classList.add('opacity-60');
+      }
+    });
+
+    // Share lesson
+    shareButton.addEventListener('click', async () => {
+      const shareData = {
+        title: todayLesson.title,
+        text: `${todayLesson.content.substring(0, 100)}...`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.log('Share cancelled');
+        }
+      } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(`${todayLesson.title}\n\n${todayLesson.content}\n\nLearn more: ${window.location.href}`);
+        shareButton.querySelector('span') || shareButton.insertAdjacentText('beforeend', ' Copied!');
+        setTimeout(() => {
+          shareButton.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+            Share
+          `;
+        }, 2000);
+      }
+    });
+
+    // Newsletter form
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('newsletter-email').value;
+      // Store locally (in real app, send to server)
+      const subscribers = JSON.parse(localStorage.getItem('knowly-subscribers') || '[]');
+      if (!subscribers.includes(email)) {
+        subscribers.push(email);
+        localStorage.setItem('knowly-subscribers', JSON.stringify(subscribers));
+      }
+      newsletterForm.classList.add('hidden');
+      newsletterSuccess.classList.remove('hidden');
+    });
+  });
+</script>
