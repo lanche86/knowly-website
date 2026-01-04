@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="Blog | Knowly">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
+    <p class="text-xl text-gray-600 mb-12">
+      Thoughts on learning, personal growth, and building Knowly.
+    </p>
+
+    <div class="space-y-8">
+      {posts.map((post) => (
+        <article class="border-b border-gray-100 pb-8">
+          <a href={`/blog/${post.slug}`} class="group">
+            <time class="text-sm text-gray-500">
+              {post.data.pubDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+            <h2 class="text-2xl font-semibold text-gray-900 group-hover:text-primary transition-colors mt-2 mb-3">
+              {post.data.title}
+            </h2>
+            <p class="text-gray-600">{post.data.description}</p>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {posts.length === 0 && (
+      <p class="text-gray-500 text-center py-12">
+        No posts yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>
